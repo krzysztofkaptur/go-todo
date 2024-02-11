@@ -1,22 +1,28 @@
 package main
 
 import (
-	// "database/sql"
-	"database/sql"
 	"fmt"
+	"log"
 
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	connStr := "user=postgres dbname=go_todo password=password sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
-
-	if err != nil {
-		fmt.Println(err)
+	// init env
+	envErr := InitEnv()
+	if envErr != nil {
+		log.Fatal("Error loading .env file")
+		return
+	}
+	
+	// init db
+	store, dbErr := NewDB()
+	if dbErr != nil {
+		fmt.Println(dbErr)
+		return
 	}
 
-	server := ApiServer{address: ":5000", store: Database{db}}
+	server := ApiServer{address: ":5000", store: store}
 	server.Run()
 }
 
