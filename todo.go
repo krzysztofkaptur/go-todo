@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -17,28 +16,6 @@ type CreateTodoReq struct {
 
 type UpdateTodoReq struct {
 	Text string `json: "text"`
-}
-
-func (s *ApiServer) handleTodos(w http.ResponseWriter, r *http.Request) error {
-	if r.Method == "GET" {
-		return s.handleFetchTodos(w, r)
-	} else if r.Method == "POST" {
-		return s.handleCreateTodo(w, r)
-	}
-
-	return fmt.Errorf("method not allowed %s", r.Method)
-}
-
-func (s *ApiServer) handleTodo(w http.ResponseWriter, r *http.Request) error {
-	if r.Method == "DELETE" {
-		return s.handleDeleteTodo(w, r)
-	} else if r.Method == "GET" {
-		return s.handleFetchTodo(w, r)
-	} else if r.Method == "PATCH" {
-		return s.handleUpdateTodo(w, r)
-	}
-
-	return fmt.Errorf("method not allowed %s", r.Method)
 }
 
 func (s *ApiServer) handleFetchTodos(w http.ResponseWriter, r *http.Request) error {
