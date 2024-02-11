@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 type Todo struct {
@@ -98,7 +96,7 @@ func (s *ApiServer) handleCreateTodo(w http.ResponseWriter, r *http.Request) err
 }
 
 func (s *ApiServer) handleDeleteTodo(w http.ResponseWriter, r *http.Request) error {
-	id := mux.Vars(r)["id"]
+	id := r.PathValue("id")
 
 	query := `
 		delete from todos
@@ -117,8 +115,7 @@ func (s *ApiServer) handleDeleteTodo(w http.ResponseWriter, r *http.Request) err
 }
 
 func (s *ApiServer) handleFetchTodo(w http.ResponseWriter, r *http.Request) error {
-	id := mux.Vars(r)["id"]
-
+	id := r.PathValue("id")
 
 	query := `
 		select *
@@ -149,7 +146,7 @@ func (s *ApiServer) handleFetchTodo(w http.ResponseWriter, r *http.Request) erro
 }
 
 func (s *ApiServer) handleUpdateTodo(w http.ResponseWriter, r *http.Request) error {
-	id := mux.Vars(r)["id"]
+	id := r.PathValue("id")
 	updateTodoReq := &UpdateTodoReq{}
 
 	jsonErr := json.NewDecoder(r.Body).Decode(&updateTodoReq)

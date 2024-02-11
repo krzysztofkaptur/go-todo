@@ -1,13 +1,12 @@
 package main
 
 import (
+	// "database/sql"
 	"database/sql"
 	"fmt"
 
 	_ "github.com/lib/pq"
 )
-
-
 
 func main() {
 	connStr := "user=postgres dbname=go_todo password=password sslmode=disable"

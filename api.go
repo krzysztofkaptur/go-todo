@@ -2,8 +2,6 @@ package main
 
 import (
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 type ApiServer struct {
@@ -22,10 +20,14 @@ func makeHTTPHandleFunc(f apiFunc) http.HandlerFunc {
 }
 
 func (s *ApiServer) Run() {
-	router := mux.NewRouter()
+	router := http.NewServeMux()
 
-	router.HandleFunc("/todos", makeHTTPHandleFunc(s.handleTodos))
-	router.HandleFunc("/todos/{id}", makeHTTPHandleFunc(s.handleTodo))
+	router.HandleFunc("GET /todos/", makeHTTPHandleFunc(s.handleFetchTodos))
+	router.HandleFunc("POST /todos/", makeHTTPHandleFunc(s.handleCreateTodo))
+	
+	router.HandleFunc("GET /todos/{id}/", makeHTTPHandleFunc(s.handleFetchTodo))
+	router.HandleFunc("DELETE /todos/{id}/", makeHTTPHandleFunc(s.handleDeleteTodo))
+	router.HandleFunc("PATCH /todos/{id}/", makeHTTPHandleFunc(s.handleUpdateTodo))
 
 	http.ListenAndServe(s.address, router)
 }
