@@ -6,7 +6,7 @@ import (
 
 type ApiServer struct {
 	address string
-	store   Database
+	store   ApiConfig
 }
 
 type apiFunc func(http.ResponseWriter, *http.Request) error

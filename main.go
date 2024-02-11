@@ -7,6 +7,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+
+
 func main() {
 	// init env
 	envErr := InitEnv()

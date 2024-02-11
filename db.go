@@ -3,25 +3,30 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"go-todo/internal/database"
 	"os"
 )
 
-type Database struct {
-	db *sql.DB
+type ApiConfig struct {
+	DB *database.Queries
 }
 
-func NewDB() (Database, error) {
+func NewDB() (ApiConfig, error) {
 	dbUser := os.Getenv("DB_USER")
 	dbName := os.Getenv("DB_NAME")
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbSslMode := os.Getenv("DB_SSL_MODE")
 
 	connStr := fmt.Sprintf("user=%v dbname=%v password=%v sslmode=%v", dbUser, dbName, dbPassword, dbSslMode)
-	db, err := sql.Open("postgres", connStr)
+	conn, err := sql.Open("postgres", connStr)
 
 	if err != nil {
-		return Database{}, err
+		return ApiConfig{}, err
 	}
 
-	return Database{db}, nil
+	apiCfg := ApiConfig{
+		DB: database.New(conn),
+	}
+
+	return apiCfg, nil
 }
